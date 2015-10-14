@@ -1,10 +1,13 @@
 package tw.idv.chunhsin.class4_draws;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
@@ -81,14 +84,14 @@ public class MyView extends View {
 //        paintRed.setShader(new LinearGradient(345,0,345,60,Color.BLUE,Color.RED, Shader.TileMode.REPEAT));
         int[] colors={Color.RED,Color.YELLOW,Color.GREEN,Color.BLUE};
         float[] positions={0.2f,0.4f,0.6f,1f};
-        paintRed.setShader(new LinearGradient(345,0,345,60,colors,positions, Shader.TileMode.REPEAT));
+        paintRed.setShader(new LinearGradient(345, 0, 345, 60, colors, positions, Shader.TileMode.REPEAT));
 
 
         float[] pts2={345,5,295,55,295,55,395,55,395,55,345,5};
         canvas.drawLines(pts2, paintRed);
 
         //畫實心矩形漸層色
-        canvas.drawRect(295,65,395,165,paintRed);
+        canvas.drawRect(295, 65, 395, 165, paintRed);
 
         //畫實心扇形漸層色
         RectF rectF4=new RectF(295,175,395,275);
@@ -99,6 +102,34 @@ public class MyView extends View {
         RectF rectF5=new RectF(295,285,395,385);
         canvas.drawOval(rectF5, paintRed);
 
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.tower);
+        canvas.drawBitmap(bmp,5,5,paintBlue);
 
+        canvas.drawLine(20, 200, 200, 200, paintBlue);
+
+        String myStr = "this is my String";
+        canvas.drawText(myStr, 0, myStr.length(), 20, 200, paintGreen);
+
+        Path path = new Path();
+        path.addCircle(200,200,200,Path.Direction.CW);
+        canvas.drawTextOnPath(myStr, path, 0, -5, paintRed);
+        canvas.drawCircle(200,200,200,paintBlue);
+
+
+        // rotate picture
+        Bitmap bmp2= BitmapFactory.decodeResource(getResources(),R.drawable.tower);
+        int wBmp=bmp2.getWidth() / 2;
+        int hBmp = bmp2.getHeight()/2;
+
+        canvas.save();
+        canvas.rotate(45, 300, 600);
+        canvas.drawBitmap(bmp2, 300 - wBmp, 600 - hBmp, paintBlue);
+        canvas.restore();
+
+        // rotate picture
+        canvas.save();
+        canvas.rotate(45, 300, 300);
+        canvas.drawBitmap(bmp2, 300 - wBmp, 300 - hBmp, paintBlue);
+        canvas.restore();
     }
 }
