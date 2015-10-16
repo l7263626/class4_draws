@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view){
         //drawSomthing();
-        Bitmap bmp = Bitmap.createBitmap(image.getWidth(),image.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bmp);
+        final Bitmap bmp = Bitmap.createBitmap(image.getWidth(),image.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
 
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
@@ -104,6 +104,15 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.STROKE);
 
+        final Paint p=new Paint();
+        p.setAntiAlias(true);
+        p.setColor(Color.BLUE);
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(2.0f);
+
+        final int bmp_w=image.getWidth();
+        final int bmp_h=image.getHeight();
+/*
         int lt=10;
         int rb=310;
         int j=0;
@@ -116,6 +125,29 @@ public class MainActivity extends AppCompatActivity {
             j++;
         }
         image.setImageBitmap(bmp);
+*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(int i=1;i<bmp_w/10;i++){
+                    RectF rectF=new RectF(i*10,i*10,bmp_w-i*10,bmp_h-i*10);
+                    canvas.drawColor(Color.WHITE);
+                    canvas.drawOval(rectF,p);
+                    image.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            image.setImageBitmap(bmp);
+                        }
+                    });
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }).start();
 
     }
 
@@ -132,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         paintGreen.setStyle(Paint.Style.FILL);
         paintGreen.setStrokeWidth(2.0f);
 
-        Paint paintRed=new Paint();
+        Paint paintRed = new Paint();
         paintRed.setAntiAlias(true);
         paintRed.setColor(Color.RED);
         paintRed.setStyle(Paint.Style.FILL);
